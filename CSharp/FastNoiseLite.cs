@@ -59,65 +59,65 @@ public class FastNoiseLite
     private const short INLINE = 256; // MethodImplOptions.AggressiveInlining;
     private const short OPTIMISE = 512; // MethodImplOptions.AggressiveOptimization;
 
-    public enum NoiseType 
-    { 
+    public enum NoiseType
+    {
         OpenSimplex2,
         OpenSimplex2S,
         Cellular,
         Perlin,
         ValueCubic,
-        Value 
+        Value
     };
 
-    public enum RotationType3D 
+    public enum RotationType3D
     {
-        None, 
-        ImproveXYPlanes, 
-        ImproveXZPlanes 
-    };
-    
-    public enum FractalType 
-    {
-        None, 
-        FBm, 
-        Ridged, 
-        PingPong, 
-        DomainWarpProgressive, 
-        DomainWarpIndependent 
+        None,
+        ImproveXYPlanes,
+        ImproveXZPlanes
     };
 
-    public enum CellularDistanceFunction 
+    public enum FractalType
     {
-        Euclidean, 
-        EuclideanSq, 
-        Manhattan, 
-        Hybrid 
-    };
-    
-    public enum CellularReturnType 
-    {
-        CellValue, 
-        Distance, 
-        Distance2, 
-        Distance2Add, 
-        Distance2Sub, 
-        Distance2Mul, 
-        Distance2Div 
+        None,
+        FBm,
+        Ridged,
+        PingPong,
+        DomainWarpProgressive,
+        DomainWarpIndependent
     };
 
-    public enum DomainWarpType 
-    { 
-        OpenSimplex2, 
-        OpenSimplex2Reduced, 
-        BasicGrid 
+    public enum CellularDistanceFunction
+    {
+        Euclidean,
+        EuclideanSq,
+        Manhattan,
+        Hybrid
     };
 
-    private enum TransformType3D 
+    public enum CellularReturnType
     {
-        None, 
-        ImproveXYPlanes, 
-        ImproveXZPlanes, 
-        DefaultOpenSimplex2 
+        CellValue,
+        Distance,
+        Distance2,
+        Distance2Add,
+        Distance2Sub,
+        Distance2Mul,
+        Distance2Div
+    };
+
+    public enum DomainWarpType
+    {
+        OpenSimplex2,
+        OpenSimplex2Reduced,
+        BasicGrid
+    };
+
+    private enum TransformType3D
+    {
+        None,
+        ImproveXYPlanes,
+        ImproveXZPlanes,
+        DefaultOpenSimplex2
     };
 
     private int mSeed = 1337;
@@ -159,7 +159,10 @@ public class FastNoiseLite
     /// <remarks>
     /// Default: 1337
     /// </remarks>
-    public void SetSeed(int seed) { mSeed = seed; }
+    public void SetSeed(int seed)
+    {
+        mSeed = seed;
+    }
 
     /// <summary>
     /// Sets frequency for all noise types
@@ -167,7 +170,26 @@ public class FastNoiseLite
     /// <remarks>
     /// Default: 0.01
     /// </remarks>
-    public void SetFrequency(float frequency) { mFrequency = frequency; }
+    public void SetFrequency(float frequency)
+    {
+        mFrequency = frequency;
+    }
+
+    /// <summary>
+    /// Sets the minimum value for noise.
+    /// </summary>
+    /// <remarks>
+    /// Default: -1.0f
+    /// </remarks>
+    public void SetMinimumNoiseValue(float min) { mMinNoiseValue = min; }
+
+    /// <summary>
+    /// Sets the maximum value for noise.
+    /// </summary>
+    /// <remarks>
+    /// Default: 1.0f
+    /// </remarks>
+    public void SetMaximumNoiseValue(float max) { mMaxNoiseValue = max; }
 
     /// <summary>
     /// Sets noise algorithm used for GetNoise(...)
@@ -252,9 +274,6 @@ public class FastNoiseLite
     /// Default: 2.0
     /// </remarks>
     public void SetFractalPingPongStrength(float pingPongStrength) { mPingPongStength = pingPongStrength; }
-
-    public void SetMinimumNoiseValue(float min) => mMinNoiseValue = min;
-    public void SetMaximumNoiseValue(float max) => mMaxNoiseValue = max;
 
     /// <summary>
     /// Sets distance function used in cellular noise calculations
