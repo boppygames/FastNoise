@@ -35,6 +35,9 @@ public class FastNoiseLiteGUI : Form
     private DropDown RotationType3D;
     private NumericStepper Seed;
     private NumericStepper Frequency;
+    
+    private NumericStepper MinNoiseValue;
+    private NumericStepper MaxNoiseValue;
 
     private DropDown FractalType;
     private NumericStepper FractalOctaves;
@@ -69,7 +72,7 @@ public class FastNoiseLiteGUI : Form
 
     private bool isScrolling = false;
     private float zPos = 0;
-    private Size previewStartSize = new Size(768, 768);
+    private Size previewStartSize = new Size(820, 820);
     private Size windowSizeOffset = new Size(334, 52);
 
     public FastNoiseLiteGUI()
@@ -206,6 +209,17 @@ public class FastNoiseLiteGUI : Form
                 Frequency = new NumericStepper { Value = 0.02, DecimalPlaces = 3, Increment = 0.005 };
                 Frequency.ValueChanged += Generate;
                 AddToTableWithLabel(table, Frequency, "Frequency:");
+                
+                // Min Noise Value
+                
+                MinNoiseValue = new NumericStepper { Value = -1.0f, DecimalPlaces = 3, Increment = 0.005 };
+                MinNoiseValue.ValueChanged += Generate;
+                AddToTableWithLabel(table, MinNoiseValue, "Minimum Noise Value:");
+                
+                // Max Noise Value
+                MaxNoiseValue = new NumericStepper { Value = 1.0f, DecimalPlaces = 3, Increment = 0.005 };
+                MaxNoiseValue.ValueChanged += Generate;
+                AddToTableWithLabel(table, MaxNoiseValue, "Maximum Noise Value:");
             }
 
             // Add fractal label
@@ -478,6 +492,8 @@ public class FastNoiseLiteGUI : Form
             genNoise.SetFractalGain((float)FractalGain.Value);
             genNoise.SetFractalWeightedStrength((float)FractalWeightedStrength.Value);
             genNoise.SetFractalPingPongStrength((float)FractalPingPongStrength.Value);
+            genNoise.SetMinimumNoiseValue((float)MinNoiseValue.Value);
+            genNoise.SetMaximumNoiseValue((float)MaxNoiseValue.Value);
 
             genNoise.SetCellularDistanceFunction((FastNoiseLite.CellularDistanceFunction)CellularDistanceFunction.SelectedIndex);
             genNoise.SetCellularReturnType((FastNoiseLite.CellularReturnType)CellularReturnType.SelectedIndex);
@@ -529,15 +545,13 @@ public class FastNoiseLiteGUI : Form
                         {
                             if (warp)
                                 warpNoise.DomainWarp(ref xf, ref yf, ref zf);
-
                             noise = genNoise.GetNoise(xf, yf, zf);
                         }
                         else
                         {
                             if (warp)
                                 warpNoise.DomainWarp(ref xf, ref yf);
-
-                                noise = genNoise.GetNoise(xf, yf);
+                            noise = genNoise.GetNoise(xf, yf);
                         }
 
                         avg += noise;
@@ -654,7 +668,7 @@ public class FastNoiseLiteGUI : Form
             Max.Text = "Max: " + maxN.ToString();
 
             // Sets the client (inner) size of the window for your content
-            ClientSize = new Size(Math.Max((int)PreviewWidth.Value, 768), Math.Max((int)PreviewHeight.Value, 768)) + windowSizeOffset;
+            ClientSize = new Size(Math.Max((int)PreviewWidth.Value, 820), Math.Max((int)PreviewHeight.Value, 820)) + windowSizeOffset;
 
             if (isScrolling)
             {

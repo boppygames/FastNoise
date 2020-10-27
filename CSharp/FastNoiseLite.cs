@@ -132,6 +132,8 @@ public class FastNoiseLite
     private float mGain = 0.5f;
     private float mWeightedStrength = 0.0f;
     private float mPingPongStength = 2.0f;
+    private float mMinNoiseValue = -1.0f;
+    private float mMaxNoiseValue = 1.0f;
 
     private float mFractalBounding = 1 / 1.75f;
 
@@ -251,6 +253,8 @@ public class FastNoiseLite
     /// </remarks>
     public void SetFractalPingPongStrength(float pingPongStrength) { mPingPongStength = pingPongStrength; }
 
+    public void SetMinimumNoiseValue(float min) => mMinNoiseValue = min;
+    public void SetMaximumNoiseValue(float max) => mMaxNoiseValue = max;
 
     /// <summary>
     /// Sets distance function used in cellular noise calculations
@@ -311,17 +315,25 @@ public class FastNoiseLite
     {
         TransformNoiseCoordinate(ref x, ref y);
 
+        float value;
+        
         switch (mFractalType)
         {
             default:
-                return GenNoiseSingle(mSeed, x, y);
+                value = GenNoiseSingle(mSeed, x, y);
+                break;
             case FractalType.FBm:
-                return GenFractalFBm(x, y);
+                value =  GenFractalFBm(x, y);
+                break;
             case FractalType.Ridged:
-                return GenFractalRidged(x, y);
+                value =  GenFractalRidged(x, y);
+                break;
             case FractalType.PingPong:
-                return GenFractalPingPong(x, y);
+                value =  GenFractalPingPong(x, y);
+                break;
         }
+
+        return Math.Clamp(value, mMinNoiseValue, mMaxNoiseValue);
     }
 
     /// <summary>
@@ -335,17 +347,25 @@ public class FastNoiseLite
     {
         TransformNoiseCoordinate(ref x, ref y, ref z);
 
+        float value;
+        
         switch (mFractalType)
         {
             default:
-                return GenNoiseSingle(mSeed, x, y, z);
+                value = GenNoiseSingle(mSeed, x, y, z);
+                break;
             case FractalType.FBm:
-                return GenFractalFBm(x, y, z);
+                value =  GenFractalFBm(x, y, z);
+                break;
             case FractalType.Ridged:
-                return GenFractalRidged(x, y, z);
+                value =  GenFractalRidged(x, y, z);
+                break;
             case FractalType.PingPong:
-                return GenFractalPingPong(x, y, z);
+                value =  GenFractalPingPong(x, y, z);
+                break;
         }
+
+        return Math.Clamp(value, mMinNoiseValue, mMaxNoiseValue);
     }
 
 
